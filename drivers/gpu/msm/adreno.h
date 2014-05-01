@@ -1,4 +1,4 @@
-/* Copyright (c) 2008-2012, The Linux Foundation. All rights reserved.
+/* Copyright (c) 2008-2012,2014 The Linux Foundation. All rights reserved.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2 and
@@ -45,6 +45,7 @@
 #define KGSL_END_OF_IB_IDENTIFIER	0x2ABEDEAD
 #define KGSL_END_OF_FRAME_IDENTIFIER	0x2E0F2E0F
 #define KGSL_NOP_IB_IDENTIFIER	        0x20F20F20
+#define KGSL_NOP_DATA_FILLER		0xFEEDFACE
 
 #ifdef CONFIG_MSM_SCM
 #define ADRENO_DEFAULT_PWRSCALE_POLICY  (&kgsl_pwrscale_policy_tz)
@@ -241,8 +242,7 @@ struct adreno_ft_data {
 #define KGSL_FT_PAGEFAULT_GPUHALT_ENABLE     BIT(1)
 #define KGSL_FT_PAGEFAULT_LOG_ONE_PER_PAGE   BIT(2)
 #define KGSL_FT_PAGEFAULT_LOG_ONE_PER_INT    BIT(3)
-#define KGSL_FT_PAGEFAULT_DEFAULT_POLICY     (KGSL_FT_PAGEFAULT_INT_ENABLE + \
-					KGSL_FT_PAGEFAULT_GPUHALT_ENABLE)
+#define KGSL_FT_PAGEFAULT_DEFAULT_POLICY     KGSL_FT_PAGEFAULT_INT_ENABLE
 
 extern struct adreno_gpudev adreno_a2xx_gpudev;
 extern struct adreno_gpudev adreno_a3xx_gpudev;
