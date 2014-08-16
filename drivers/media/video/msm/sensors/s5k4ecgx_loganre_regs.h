@@ -1905,28 +1905,24 @@ const unsigned int s5k4ecgx_init_reg2[] = {
 	0x0F120001, //REG_TC_AF_WinSizesUpdated
 // 2nd search setting
 	0x002A070E,
-	0x0F1200C0,
+	0x0F1200FF, //C0,
 	0x002A071E,
 	0x0F120000,
 	0x002A163C,
 	0x0F120000,
 	0x002A1648,
-	0x0F121002,
+	0x0F129002, //1002,
 	0x002A1652,
 	0x0F120002,
 	0x0F120000,
 	0x002A15E0,
-	0x0F120902,//<-best//0401//0402//0416_0902
-	0x002A1656,	                            
-	0x0F120000,	//af_search_usCapturePolicy
+	0x0F120801, //0902,//<-best//0401//0402//0416_0902
 // Peak Threshold
 	0x002A164C,
 	0x0F120003,
 	0x002A163E,
-	0x0F1200D5,//00A0
-	0x0F120080,
-	0x002A47A8,	                               
-	0x0F120080,	//TNP, Macro Threshold register
+	0x0F1200E5, //00D5,//00A0
+	0x0F1200CC, //0080,
 // Home Pos
 	0x002A15D4,
 	0x0F120000,
@@ -1981,13 +1977,13 @@ const unsigned int s5k4ecgx_init_reg2[] = {
 	0x0F123FF0,
 	0x0F1203E8,
 	0x0F120000,
-	0x0F120003,
-	0x0F120001,
-	0x0F12000A,
-	0x0F120080,
-	0x0F1200C0,
-	0x0F1200E0,
-	0x0F120000,
+	0x0F120080, //0003, delay2
+	0x0F120009, //0001, threshold
+	0x0F120020, //000A, delay1
+	0x0F120040, //0080,
+	0x0F120080, //00C0,
+	0x0F1200C0, //00E0,
+	0x0F1200E0, //0000,
 	0x002A028C,
 	0x0F120003, 
 	
@@ -2278,10 +2274,7 @@ const unsigned int s5k4ecgx_init_reg2[] = {
 	0x002A0F2A, 
 	0x0F120000, 	///*AFC_Default BIT[0] 1:60Hz 0:50Hz */
 	0x002A04E6, 
-	0x0F12075F, 	///*REG_TC_DBG 7F: 60Hz  5F:50Hz */
-	0x002A04D6,
-	0x0F120001,
-	0x0F120001,
+	0x0F12077F, 	///*REG_TC_DBG 7F: 60Hz  5F:50Hz */
 
 //==================================================================================
 // AE Setting
@@ -3606,14 +3599,14 @@ const unsigned int s5k4ecgx_WB_Auto[] = {
 	0xFCFCD000,
 	0x00287000,
 	0x002A04E6,
-	0x0F12075F,
+	0x0F12077F,
 };
 
 const unsigned int s5k4ecgx_WB_Sunny[] = {
 	0xFCFCD000,
 	0x00287000,
 	0x002A04E6,
-	0x0F120757,
+	0x0F120777,
   
   0x002A04BA, //R gain
   0x0F120550,
@@ -3633,7 +3626,7 @@ const unsigned int s5k4ecgx_WB_Cloudy[] = {
   0xFCFCD000,
   0x00287000,	
   0x002A04E6,	
-  0x0F120757,
+  0x0F120777,
 
 
   0x002A04BA,  //R gain                       
@@ -3654,7 +3647,7 @@ const unsigned int s5k4ecgx_WB_Tungsten[] = {
   0xFCFCD000,
   0x00287000,
   0x002A04E6,
-  0x0F120757,
+  0x0F120777,
 
 
   0x002A04BA,
@@ -3674,7 +3667,7 @@ const unsigned int s5k4ecgx_WB_Fluorescent[] = {
   0xFCFCD000,
   0x00287000,
   0x002A04E6,
-  0x0F120757,
+  0x0F120777,
 
 
   0x002A04BA,  //R gain
@@ -3695,14 +3688,14 @@ const unsigned int s5k4ecgx_WB_Auto_ISO_on[] = {
 	0xFCFCD000,
 	0x00287000,
 	0x002a04E6,
-	0x0f12075F,
+	0x0f12077F,
 };
 
 const unsigned int s5k4ecgx_WB_Sunny_ISO_on[] = {
 	0xFCFCD000, 
 	0x00287000, 
 	0x002A04E6, 
-	0x0F120757, 
+	0x0F120777, 
               
   0x002A04BA,  //R gain   
   0x0F120550,             
@@ -3722,7 +3715,7 @@ const unsigned int s5k4ecgx_WB_Cloudy_ISO_on[] = {
   0xFCFCD000,                 
   0x00287000,	                
   0x002A04E6,	                
-  0x0F120757,                 
+  0x0F120777,                 
                               
                               
   0x002A04BA,  //R gain                   
@@ -3742,7 +3735,7 @@ const unsigned int s5k4ecgx_WB_Tungsten_ISO_on[] = {
   0xFCFCD000,      
   0x00287000,      
   0x002A04E6,      
-  0x0F120757,      
+  0x0F120777,      
              
              
   0x002A04BA,  //R gain  
@@ -3763,7 +3756,7 @@ const unsigned int s5k4ecgx_WB_Fluorescent_ISO_on[] = {
   0xFCFCD000,       
   0x00287000,       
   0x002A04E6,       
-  0x0F120757,       
+  0x0F120777,       
              
              
   0x002A04BA,  //R gain  
@@ -3804,10 +3797,7 @@ const unsigned int s5k4ecgx_ISO_Auto[] = {
 	0x0F120000,		/*00:50Hz 01:60Hz */
 
 	0x002A04E6,   // S/W Program */
-  0x0F12075F, 
-	0x002A04D6,
-	0x0F120001,
-	0x0F120001,
+	0x0F12077F, 
 
 	0x002A04D0,
 	0x0F120000,	  /*REG_SF_USER_IsoType */
@@ -3943,10 +3933,7 @@ const unsigned int s5k4ecgx_ISO_Auto_MWB_on[] = {
 	0x0F120000,
 	           
 	0x002A04E6,
-	0x0F120757,
-	0x002A04D6,
-	0x0F120001,
-	0x0F120001,
+	0x0F120777,
 	           
 	0x002A04D0,
 	0x0F120000,
@@ -3968,7 +3955,7 @@ const unsigned int s5k4ecgx_ISO_50_MWB_on[] = {
 	0x0F121388,
 	           
 	0x002A04E6,
-	0x0F120757,
+	0x0F120777,
 	0x002A04D6,
 	0x0F120000,
 	0x0F120001,
@@ -3993,7 +3980,7 @@ const unsigned int s5k4ecgx_ISO_100_MWB_on[] = {
 	0x0F121388,
 	           
 	0x002A04E6,
-	0x0F120757,
+	0x0F120777,
 	0x002A04D6,
 	0x0F120000,
 	0x0F120001,
@@ -4018,7 +4005,7 @@ const unsigned int s5k4ecgx_ISO_200_MWB_on[] = {
 	0x0F121388,
 	           
 	0x002A04E6,
-	0x0F120757,
+	0x0F120777,
 	0x002A04D6,
 	0x0F120000,
 	0x0F120001,
@@ -4043,7 +4030,7 @@ const unsigned int s5k4ecgx_ISO_400_MWB_on[] = {
 	0x0F121388,
 	           
 	0x002A04E6,
-	0x0F120757,
+	0x0F120777,
 	0x002A04D6,
 	0x0F120000,
 	0x0F120001,
@@ -4671,7 +4658,7 @@ const unsigned int s5k4ecgx_Scene_Default[] = {
 	0x0F120000,		/*afit_bUseNB_Afit */
 
 	0x002A04E6,
-	0x0F12075F,		/*REG_TC_DBG_AutoAlgEnBits */
+	0x0F12077F,		/*REG_TC_DBG_AutoAlgEnBits */
 
   0x002A1484,
   0x0F12003C,
@@ -5009,7 +4996,7 @@ const unsigned int s5k4ecgx_Scene_Sunset[] = {
 	0xFCFCD000, 
 	0x00287000, 
 	0x002A04E6, 
-	0x0F120757, 		/*REG_TC_DBG_AutoAlgEnBits AWB Off */
+	0x0F120777, 		/*REG_TC_DBG_AutoAlgEnBits AWB Off */
               
   0x002A04BA, 
   0x0F120610, 
@@ -5028,7 +5015,7 @@ const unsigned int s5k4ecgx_Scene_Duskdawn[] = {
   0xFCFCD000,
   0x00287000,
   0x002A04E6,
-  0x0F120757,		/*REG_TC_DBG_AutoAlgEnBits AWB Off */
+  0x0F120777,		/*REG_TC_DBG_AutoAlgEnBits AWB Off */
              
              
   0x002A04BA,
@@ -5128,7 +5115,7 @@ const unsigned int s5k4ecgx_Scene_Candle_Light[] = {
 	0xFCFCD000, 
 	0x00287000, 
 	0x002A04E6, 
-	0x0F120757, /*REG_TC_DBG_AutoAlgEnBits AWB Off */
+	0x0F120777, /*REG_TC_DBG_AutoAlgEnBits AWB Off */
 
 	0x002A04BA, 
 	0x0F120610, 
@@ -5287,7 +5274,7 @@ const unsigned int s5k4ecgx_AF_Macro_mode_3[] = {
 0x0F1200B0,  
             
 0x002A15DA, 
-0x0F121700, 
+0x0F121500, //1700
 };
 
 const unsigned int s5k4ecgx_AF_Low_Light_normal_mode_1[] = {
@@ -5399,7 +5386,32 @@ const unsigned int s5k4ecgx_Preview_Return[] = {
 	0x0F120001, /*REG_TC_GP_EnableCaptureChanged*/
 };
 
-		/* Flash Control */
+const unsigned int s5k4ecgx_LightSensing_Preview[] = {
+	/*flicker off (Fix for shutter value)*/
+	0xFCFCD000,
+	0x00287000,
+	0x002A04D6,
+	0x0F120000, /*REG_SF_USER_FlickerQuant*/
+	0x0F120001, /*REG_SF_USER_FlickerQuantChanged*/
+
+	/*AE off*/
+	0x002A04E6, /*REG_TC_DBG_AutoAlgEnBitsdefault = 077F*/
+	0x0F120779,/*077F --> 0779*/
+
+	/*shutter*/
+	0x002A04AC, /*REG_SF_USER_Exposure*/
+	0x0F1200AE, /*s00AE = 174dec//1/576 = 1.74ms*/
+	0x002A04B0,
+	0x0F120001, /*REG_SF_USER_ExposureChanged*/
+
+	/*gain*/
+	0x002A04B2,
+	0x0F120280, /*REG_SF_USER_TotalGain //gainx1 = s0100 //gainx2=s0200 //gainx4 =s0400*/
+	0x002A04B4,
+	0x0F120001, /*REG_SF_USER_TotalGainChanged*/
+};
+
+/* Flash Control */
 const unsigned int s5k4ecgx_Flash_init[] = {
 /* Include initial setting*/
 };
@@ -5795,7 +5807,7 @@ const unsigned int s5k4ecgx_1280_Camcorder[] = {	/* 1280 720 */
 	0x002A18AC,
 	0x0F120060,	/*senHal_uAddColsBin		*/
 	0x0F120060,	/*senHal_uAddColsNoBin	*/
-	0x0F1207DC,	/*senHal_uMinColsBin  	*/
+	0x0F1205C0,	/*senHal_uMinColsBin  	*/
 	0x0F1205C0,	/*senHal_uMinColsNoBin	*/
 
 
@@ -5844,7 +5856,7 @@ const unsigned int s5k4ecgx_1280_Camcorder[] = {	/* 1280 720 */
 	0x0F121388,		/*SARR_uNormBrInDoor */                   
                                                           
 	0x002A098C,                                             
-	0x0F120010,		/*7000098C_BRIGHTNESS   AFIT 0 */       
+	0x0F120024,		/*10 7000098C_BRIGHTNESS   AFIT 0 */       
 	0x0F120010,		/*7000098E_CONTRAST */                  
 	0x0F120000,		/*70000990_SATURATION */                
 	0x0F120000,		/*70000992_SHARP_BLUR */                
@@ -6360,41 +6372,6 @@ const unsigned int s5k4ecgx_Camcorder_Disable[] = {/*1280 720 */
 	/* AE TARGET*/
 	0x002A1484,
 	0x0F12003C,	/*TVAR_ae_BrAve*/
-	
-	/* METERING*/
-	0x002A1492, /* normal */
-	0x0F120100,
-	0x0F120101,
-	0x0F120101,
-	0x0F120001,
-	0x0F120101,
-	0x0F120201,
-	0x0F120102,
-	0x0F120101,
-	0x0F120101,
-	0x0F120202,
-	0x0F120202,
-	0x0F120101,
-	0x0F120201,
-	0x0F120302,
-	0x0F120203,
-	0x0F120102,
-	0x0F120201,
-	0x0F120302,
-	0x0F120203,
-	0x0F120102,
-	0x0F120201,
-	0x0F120202,
-	0x0F120202,
-	0x0F120102,
-	0x0F120101,
-	0x0F120202,
-	0x0F120202,
-	0x0F120101,
-	0x0F120101,
-	0x0F120101,
-	0x0F120101,
-	0x0F120101,
 	
 
 	/* SHARPNESS n NOISE */
@@ -6918,7 +6895,7 @@ const unsigned int s5k4ecgx_800_Camcorder[] = {	/* 800 480 */
 	0x002A18AC,
 	0x0F120060,	/*senHal_uAddColsBin		*/
 	0x0F120060,	/*senHal_uAddColsNoBin	*/
-	0x0F1207DC,	/*senHal_uMinColsBin  	*/
+	0x0F1205C0,	/*senHal_uMinColsBin  	*/
 	0x0F1205C0,	/*senHal_uMinColsNoBin	*/
 
 
@@ -6967,7 +6944,7 @@ const unsigned int s5k4ecgx_800_Camcorder[] = {	/* 800 480 */
 	0x0F121388,		/*SARR_uNormBrInDoor */                   
                                                           
 	0x002A098C,                                             
-	0x0F120010,		/*7000098C_BRIGHTNESS   AFIT 0 */       
+	0x0F120024,		/*10 7000098C_BRIGHTNESS   AFIT 0 */       
 	0x0F120010,		/*7000098E_CONTRAST */                  
 	0x0F120000,		/*70000990_SATURATION */                
 	0x0F120000,		/*70000992_SHARP_BLUR */                
@@ -7477,7 +7454,7 @@ const unsigned int s5k4ecgx_720_Camcorder[] = {	/* 720 480 */
 	0x002A18AC,
 	0x0F120060,	/*senHal_uAddColsBin		*/
 	0x0F120060,	/*senHal_uAddColsNoBin	*/
-	0x0F1207DC,	/*senHal_uMinColsBin  	*/
+	0x0F1205C0,	/*senHal_uMinColsBin  	*/
 	0x0F1205C0,	/*senHal_uMinColsNoBin	*/
 
 
@@ -7526,7 +7503,7 @@ const unsigned int s5k4ecgx_720_Camcorder[] = {	/* 720 480 */
 	0x0F121388,		/*SARR_uNormBrInDoor */                   
                                                           
 	0x002A098C,                                             
-	0x0F120010,		/*7000098C_BRIGHTNESS   AFIT 0 */       
+	0x0F120024,		/*10 7000098C_BRIGHTNESS   AFIT 0 */       
 	0x0F120010,		/*7000098E_CONTRAST */                  
 	0x0F120000,		/*70000990_SATURATION */                
 	0x0F120000,		/*70000992_SHARP_BLUR */                
@@ -8036,7 +8013,7 @@ const unsigned int s5k4ecgx_640_Camcorder[] = {	/* 640 480 */
 	0x002A18AC,
 	0x0F120060,	/*senHal_uAddColsBin		*/
 	0x0F120060,	/*senHal_uAddColsNoBin	*/
-	0x0F1207DC,	/*senHal_uMinColsBin  	*/
+	0x0F1205C0,	/*senHal_uMinColsBin  	*/
 	0x0F1205C0,	/*senHal_uMinColsNoBin	*/
 
 
@@ -8085,7 +8062,7 @@ const unsigned int s5k4ecgx_640_Camcorder[] = {	/* 640 480 */
 	0x0F121388,		/*SARR_uNormBrInDoor */                   
                                                           
 	0x002A098C,                                             
-	0x0F120010,		/*7000098C_BRIGHTNESS   AFIT 0 */       
+	0x0F120024,		/*10 7000098C_BRIGHTNESS   AFIT 0 */       
 	0x0F120010,		/*7000098E_CONTRAST */                  
 	0x0F120000,		/*70000990_SATURATION */                
 	0x0F120000,		/*70000992_SHARP_BLUR */                
@@ -8595,7 +8572,7 @@ const unsigned int s5k4ecgx_352_Camcorder[] = {	/* 352 288 */
 	0x002A18AC,
 	0x0F120060,	/*senHal_uAddColsBin		*/
 	0x0F120060,	/*senHal_uAddColsNoBin	*/
-	0x0F1207DC,	/*senHal_uMinColsBin  	*/
+	0x0F1205C0,	/*senHal_uMinColsBin  	*/
 	0x0F1205C0,	/*senHal_uMinColsNoBin	*/
 
 
@@ -8644,7 +8621,7 @@ const unsigned int s5k4ecgx_352_Camcorder[] = {	/* 352 288 */
 	0x0F121388,		/*SARR_uNormBrInDoor */                   
                                                           
 	0x002A098C,                                             
-	0x0F120010,		/*7000098C_BRIGHTNESS   AFIT 0 */       
+	0x0F120024,		/*10 7000098C_BRIGHTNESS   AFIT 0 */       
 	0x0F120010,		/*7000098E_CONTRAST */                  
 	0x0F120000,		/*70000990_SATURATION */                
 	0x0F120000,		/*70000992_SHARP_BLUR */                
@@ -9154,7 +9131,7 @@ const unsigned int s5k4ecgx_320_Camcorder[] = {	/* 320 240 */
 	0x002A18AC,
 	0x0F120060,	/*senHal_uAddColsBin		*/
 	0x0F120060,	/*senHal_uAddColsNoBin	*/
-	0x0F1207DC,	/*senHal_uMinColsBin  	*/
+	0x0F1205C0,	/*senHal_uMinColsBin  	*/
 	0x0F1205C0,	/*senHal_uMinColsNoBin	*/
 
 
@@ -9203,7 +9180,7 @@ const unsigned int s5k4ecgx_320_Camcorder[] = {	/* 320 240 */
 	0x0F121388,		/*SARR_uNormBrInDoor */                   
                                                           
 	0x002A098C,                                             
-	0x0F120010,		/*7000098C_BRIGHTNESS   AFIT 0 */       
+	0x0F120024,		/*10 7000098C_BRIGHTNESS   AFIT 0 */       
 	0x0F120010,		/*7000098E_CONTRAST */                  
 	0x0F120000,		/*70000990_SATURATION */                
 	0x0F120000,		/*70000992_SHARP_BLUR */                
@@ -9713,7 +9690,7 @@ const unsigned int s5k4ecgx_176_Camcorder[] = {	/* 176 144 */
 	0x002A18AC,
 	0x0F120060,	/*senHal_uAddColsBin		*/
 	0x0F120060,	/*senHal_uAddColsNoBin	*/
-	0x0F1207DC,	/*senHal_uMinColsBin  	*/
+	0x0F1205C0,	/*senHal_uMinColsBin  	*/
 	0x0F1205C0,	/*senHal_uMinColsNoBin	*/
 
 
@@ -9762,7 +9739,7 @@ const unsigned int s5k4ecgx_176_Camcorder[] = {	/* 176 144 */
 	0x0F121388,		/*SARR_uNormBrInDoor */                   
                                                           
 	0x002A098C,                                             
-	0x0F120010,		/*7000098C_BRIGHTNESS   AFIT 0 */       
+	0x0F120024,		/*10 7000098C_BRIGHTNESS   AFIT 0 */       
 	0x0F120010,		/*7000098E_CONTRAST */                  
 	0x0F120000,		/*70000990_SATURATION */                
 	0x0F120000,		/*70000992_SHARP_BLUR */                
