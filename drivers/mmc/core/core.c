@@ -65,6 +65,10 @@ static void mmc_clk_scaling(struct mmc_host *host, bool from_wq);
  */
 #define MMC_BKOPS_MAX_TIMEOUT	(30 * 1000) /* max time to wait in ms */
 
+/* Flushing a large amount of cached data may take a long time. */
+#define MMC_FLUSH_REQ_TIMEOUT_MS 90000 /* msec */
+#define MMC_CACHE_DISBALE_TIMEOUT_MS 180000 /* msec */
+
 static struct workqueue_struct *workqueue;
 
 /*
@@ -616,11 +620,11 @@ static int mmc_wait_for_data_req_done(struct mmc_host *host,
 	struct mmc_context_info *context_info = &host->context_info;
 	bool pending_is_urgent = false;
 	bool is_urgent = false;
-	int err;
+	int err, ret;
 	unsigned long flags;
 
 	while (1) {
-		wait_io_event_interruptible(context_info->wait,
+		ret = wait_io_event_interruptible(context_info->wait,
 				(context_info->is_done_rcv ||
 				 context_info->is_new_req  ||
 				 context_info->is_urgent));
@@ -673,7 +677,7 @@ static int mmc_wait_for_data_req_done(struct mmc_host *host,
 				err = MMC_BLK_NEW_REQUEST;
 				break; /* return err */
 			}
-		} else {
+		} else if (context_info->is_urgent) {
 			/*
 			 * The case when block layer sent next urgent
 			 * notification before it receives end_io on
@@ -721,6 +725,11 @@ static int mmc_wait_for_data_req_done(struct mmc_host *host,
 				pending_is_urgent = true;
 				continue; /* wait for done/new/urgent event */
 			}
+		} else {
+			pr_warn("%s: mmc thread unblocked from waiting by signal, ret=%d\n",
+					mmc_hostname(host),
+					ret);
+			continue;
 		}
 	} /* while */
 	return err;
@@ -838,7 +847,8 @@ struct mmc_async_req *mmc_start_req(struct mmc_host *host,
 			mmc_post_req(host, host->areq->mrq, 0);
 			host->areq = NULL;
 			if (areq) {
-				if (!(areq->cmd_flags & REQ_URGENT)) {
+				if (!(areq->cmd_flags &
+						MMC_REQ_NOREINSERT_MASK)) {
 					areq->reinsert_req(areq);
 					mmc_post_req(host, areq->mrq, 0);
 				} else {
@@ -3292,7 +3302,7 @@ EXPORT_SYMBOL(mmc_card_can_sleep);
 int mmc_flush_cache(struct mmc_card *card)
 {
 	struct mmc_host *host = card->host;
-	int err = 0;
+	int err = 0, rc;
 
 	if (!(host->caps2 & MMC_CAP2_CACHE_CTRL))
 		return err;
@@ -3301,10 +3311,19 @@ int mmc_flush_cache(struct mmc_card *card)
 			(card->ext_csd.cache_size > 0) &&
 			(card->ext_csd.cache_ctrl & 1)) {
 		err = mmc_switch_ignore_timeout(card, EXT_CSD_CMD_SET_NORMAL,
-				EXT_CSD_FLUSH_CACHE, 1, 0);
-		if (err)
+						EXT_CSD_FLUSH_CACHE, 1,
+						MMC_FLUSH_REQ_TIMEOUT_MS);
+		if (err == -ETIMEDOUT) {
+			pr_err("%s: cache flush timeout\n",
+					mmc_hostname(card->host));
+			rc = mmc_interrupt_hpi(card);
+			if (rc)
+				pr_err("%s: mmc_interrupt_hpi() failed (%d)\n",
+						mmc_hostname(host), rc);
+		} else if (err) {
 			pr_err("%s: cache flush error %d\n",
 					mmc_hostname(card->host), err);
+		}
 	}
 
 	return err;
@@ -3320,8 +3339,8 @@ EXPORT_SYMBOL(mmc_flush_cache);
 int mmc_cache_ctrl(struct mmc_host *host, u8 enable)
 {
 	struct mmc_card *card = host->card;
-	unsigned int timeout;
-	int err = 0;
+	unsigned int timeout = card->ext_csd.generic_cmd6_time;
+	int err = 0, rc;
 
 	if (!(host->caps2 & MMC_CAP2_CACHE_CTRL) ||
 			mmc_card_is_removable(host))
@@ -3332,17 +3351,28 @@ int mmc_cache_ctrl(struct mmc_host *host, u8 enable)
 		enable = !!enable;
 
 		if (card->ext_csd.cache_ctrl ^ enable) {
-			timeout = enable ? card->ext_csd.generic_cmd6_time : 0;
+			if (!enable)
+				timeout = MMC_CACHE_DISBALE_TIMEOUT_MS;
+
 			err = mmc_switch_ignore_timeout(card,
 					EXT_CSD_CMD_SET_NORMAL,
 					EXT_CSD_CACHE_CTRL, enable, timeout);
-			if (err)
+
+			if (err == -ETIMEDOUT && !enable) {
+				pr_err("%s:cache disable operation timeout\n",
+						mmc_hostname(card->host));
+				rc = mmc_interrupt_hpi(card);
+				if (rc)
+					pr_err("%s: mmc_interrupt_hpi() failed (%d)\n",
+							mmc_hostname(host), rc);
+			} else if (err) {
 				pr_err("%s: cache %s error %d\n",
 						mmc_hostname(card->host),
 						enable ? "on" : "off",
 						err);
-			else
+			} else {
 				card->ext_csd.cache_ctrl = enable;
+			}
 		}
 	}
 
